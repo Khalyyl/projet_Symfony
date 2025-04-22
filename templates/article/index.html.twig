@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles List{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Articles</h1>
+<a href="{{ path('article_add') }}" class="btn btn-success mb-3">Add Article</a>
+    <table class="table table-hover table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>Title</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <td>{{ article.title }}</td>
+                <td>{{ article.createdat ? article.createdat|date('Y-m-d H:i') : '' }}</td>
+                
+                
+
+                <td>
+                    <a href="{{ path('article_edit', {'id': article.id}) }}" class="btn btn-sm btn-primary">Edit</a>
+                    <form method="post" action="{{ path('article_delete', {'id': article.id}) }}" style="display:inline-block;" onsubmit="return confirm('Are you sure you want to delete this article?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" class="text-center">No articles found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
